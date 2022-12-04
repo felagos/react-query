@@ -1,34 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useReducer, useState } from 'react';
+import './App.scss'
 
-function App() {
-  const [count, setCount] = useState(0)
+const url = 'https://www.random.org/integers/?num=1&min=1&max=500&col=1&base=10&format=plain&rnd=new';
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+const getRandom = async () => {
+	const response = await fetch(url);
+	const number = await response.json();
+	return +number;
 }
 
-export default App
+export const App = () => {
+	const [number, setNumber] = useState<number>();
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [key, forceRefresh] = useReducer(x => x + 1, 0);
+
+	useEffect(() => {
+		setIsLoading(true)
+		getRandom()
+			.then(setNumber)
+			.catch(err => setError(err.message))
+	}, [key])
+
+	useEffect(() => {
+		if (number) setIsLoading(false)
+	}, [number])
+
+	useEffect(() => {
+		if (error) setIsLoading(false)
+	}, [error])
+
+	return (
+		<div className='container'>
+			{
+				isLoading ?
+					(<h2>Cargando ...</h2>) :
+					(<h2>Número Aleatorio: {number}</h2>)
+			}
+			{
+				!isLoading && error && (<h3>{error}</h3>)
+			}
+			<button onClick={forceRefresh} disabled={isLoading}>
+				{isLoading ? '.....' : 'Nuevo número'}
+			</button>
+
+		</div>
+	);
+
+}
