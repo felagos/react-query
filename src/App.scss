@@ -22,11 +22,11 @@
         transition: transform .3s;
 
         &:hover {
-            transform: translateY(-10px);
+            transform: translateY(-5px);
         }
 
         &:active {
-            transform: translateY(10px);
+            transform: translateY(5px);
         }
 
     }
