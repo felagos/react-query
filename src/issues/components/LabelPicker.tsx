@@ -1,15 +1,16 @@
-import { Label } from "../../models/Label.model"
+import { useLabels } from "../../hooks/useLabels";
+import { LoadingIcon } from "../../shared/components/LoadingIcon";
 
-interface Props {
-	labels?: Label[]
-}
+export const LabelPicker = () => {
 
-export const LabelPicker = ({ labels = [] }: Props) => {
+	const { data: labels, isLoading } = useLabels();
+
+	if (isLoading) return <LoadingIcon />
 
 	return (
 		<>
 			{
-				labels.map((label) => (
+				labels?.map((label) => (
 					<span
 						key={label.id}
 						className="badge rounded-pill m-1 label-picker"

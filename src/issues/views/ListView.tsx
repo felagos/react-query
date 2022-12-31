@@ -1,22 +1,19 @@
-import { useLabels } from '../../hooks/useLabels';
 import { IssueList } from '../components/IssueList';
 import { LabelPicker } from '../components/LabelPicker';
 
 
 export const ListView = () => {
 
-	const labels = useLabels();
+	return (
+		<div className="row mt-5">
 
-  return (
-    <div className="row mt-5">
-      
-      <div className="col-8">
-        <IssueList />
-      </div>
-      
-      <div className="col-4">
-        <LabelPicker labels={labels.data} />
-      </div>
-    </div>
-  )
+			<div className="col-8">
+				<IssueList />
+			</div>
+
+			<div className="col-4">
+				<LabelPicker />
+			</div>
+		</div>
+	)
 }
