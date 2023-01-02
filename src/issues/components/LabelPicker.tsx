@@ -1,5 +1,5 @@
-import { useLabels } from "../../hooks/useLabels";
-import { LoadingIcon } from "../../shared/components/LoadingIcon";
+import { useLabels } from "../../hooks";
+import { LoadingIcon } from "../../shared";
 
 interface Props {
 	selectedLabels: string[];
