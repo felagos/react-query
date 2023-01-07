@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react";
-import { State } from "../models"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { Issue, State } from "../models"
 import { fetchIssues } from "../services/git.service"
 
 interface Props {
@@ -9,35 +8,33 @@ interface Props {
 }
 
 export const useIssues = ({ state, labels }: Props) => {
-	const [page, setPage] = useState(1);
 
-	useEffect(() => {
-		setPage(1);
-	}, [state, labels])
+	const response = useInfiniteQuery(
+		['issues', { state, labels, page: 1 }],
+		async (data) => {
+			const propsQuery = data.queryKey[1] as Props;
 
-	const response = useQuery(['issues', { state, labels, page }],
-		() => fetchIssues({ state, labels, page }),
+			return await fetchIssues({
+				state: propsQuery.state,
+				labels: propsQuery.labels,
+				page: data.pageParam
+			});
+
+		},
 		{
-			initialData: []
+			getNextPageParam: (lastPage, pages) => {
+				if (lastPage.length === 0) return;
+
+				return pages.length + 1;
+			}
 		})
 
-	const nextPage = () => {
-		if (response.data.length === 0) return;
-
-		setPage(page + 1);
-	}
-
-	const prevPage = () => {
-		if (page > 1) setPage(page - 1);
-	}
-
 	return {
-		issues: response.data,
+		issues:  response?.data?.pages?.flat() || [],
 		isLoading: response.isLoading,
 		isFetching: response.isFetching,
-		page,
-		nextPage,
-		prevPage
+		loadMore: response.fetchNextPage,
+		hasNextPage: response.hasNextPage
 	}
 
 }

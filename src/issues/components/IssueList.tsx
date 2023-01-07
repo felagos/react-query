@@ -8,7 +8,7 @@ interface Props {
 	onStateChange: (state?: State) => () => void;
 }
 
-export const IssueList = ({ issues, state, onStateChange }: Props) => {
+export const IssueList = ({ issues = [], state, onStateChange }: Props) => {
 	return (
 		<div className="card border-white">
 			<div className="card-header bg-dark">

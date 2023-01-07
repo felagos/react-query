@@ -12,10 +12,9 @@ export const ListView = () => {
 	const {
 		issues,
 		isLoading,
-		page,
-		nextPage,
-		prevPage,
+		loadMore,
 		isFetching,
+		hasNextPage,
 	} = useIssues({ state, labels: selectedLabels });
 
 	const onChangeLabel = (labelName: string) => () => {
@@ -41,19 +40,12 @@ export const ListView = () => {
 						/>
 				}
 
-				<div className='d-flex mt-2 justify-content-between align-items-center mb-5'>
+				<div className='d-flex mt-2  align-items-center mb-5'>
 					<button
 						className='btn btn-outline-primary'
-						onClick={prevPage}
-						disabled={isFetching}>
-						Prev
-					</button>
-					<span>{isFetching ? 'Loading' : page}</span>
-					<button
-						className='btn btn-outline-primary'
-						onClick={nextPage}
-						disabled={isFetching}>
-						Next
+						onClick={() => loadMore()}
+						disabled={!hasNextPage || isFetching}>
+						Load more ...
 					</button>
 				</div>
 
