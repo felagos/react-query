@@ -1,8 +1,13 @@
 import { ENV } from "../environment";
-import { Label, Issue } from "../models";
+import { Label, Issue, State } from "../models";
 
 const URL_GET_LABELS = `${ENV.GITHUB_API_URL}/labels`;
 const URL_GET_ISSUES = `${ENV.GITHUB_API_URL}/issues`;
+
+interface FetchParams {
+	state?: State,
+	labels: string[]
+}
 
 const doGet = async <T>(url: string) => {
 	const response = await fetch(url, {
@@ -23,8 +28,13 @@ export const fetchLabels = async () => {
 	return labels as Label[];
 }
 
-export const fetchIssues = async () => {
-	return await doGet<Issue[]>(URL_GET_ISSUES);
+export const fetchIssues = async ({ state, labels }: FetchParams) => {
+	const params = new URLSearchParams();
+
+	if (state) params.append("state", state);
+	if (labels.length > 0) params.append("labels", labels.join(","));
+
+	return await doGet<Issue[]>(`${URL_GET_ISSUES}?${params.toString()}`);
 }
 
 export const fetchIssueById = async (id: number) => {

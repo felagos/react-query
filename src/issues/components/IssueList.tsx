@@ -1,23 +1,38 @@
-import { Issue } from '../../models';
+import { Issue, State } from '../../models';
 import { IssueItem } from './IssueItem';
+import classnames from 'classnames';
 
 interface Props {
-	issues: Issue[]
+	issues: Issue[];
+	state?: State;
+	onStateChange: (state?: State) => () => void;
 }
 
-export const IssueList = ({ issues }: Props) => {
+export const IssueList = ({ issues, state, onStateChange }: Props) => {
 	return (
 		<div className="card border-white">
 			<div className="card-header bg-dark">
 				<ul className="nav nav-pills card-header-pills">
 					<li className="nav-item">
-						<a className="nav-link active">All</a>
+						<a className={classnames('nav-link', {
+							active: !state
+						})}
+							onClick={onStateChange()}
+						>All</a>
 					</li>
 					<li className="nav-item">
-						<a className="nav-link">Open</a>
+						<a className={classnames('nav-link', {
+							active: state === State.Open
+						})}
+							onClick={onStateChange(State.Open)}
+						>Open</a>
 					</li>
 					<li className="nav-item">
-						<a className="nav-link">Closed</a>
+						<a className={classnames('nav-link', {
+							active: state === State.Closed
+						})}
+							onClick={onStateChange(State.Closed)}
+						>Closed</a>
 					</li>
 				</ul>
 			</div>

@@ -17,7 +17,7 @@ export interface Issue {
 	assignees: object[];
 	milestone: null;
 	comments: number;
-	created_at: Date;
+	created_at: string;
 	updated_at: Date;
 	closed_at: string | null;
 	author_association: string;
