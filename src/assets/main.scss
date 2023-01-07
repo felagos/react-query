@@ -1,0 +1,62 @@
+small {
+    font-size: 1rem;
+    font-weight: lighter;
+}
+
+h3 {
+    font-weight: 300;
+}
+
+.issue {
+    cursor: pointer;
+}
+
+.issue-subinfo {
+    font-size: .7rem;
+    color: grey;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+
+.avatar {
+    width: 35px;
+    border-radius: 100%;
+}
+
+.label-picker {
+    cursor: pointer;
+    transition: all .2s;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: all .2s;
+    }
+
+}
+
+.loader {
+    display: block;
+    animation: spin-animation 1.5s infinite linear;
+}
+
+@keyframes spin-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.label-active {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
