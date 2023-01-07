@@ -4,9 +4,10 @@ import { Label, Issue, State } from "../models";
 const URL_GET_LABELS = `${ENV.GITHUB_API_URL}/labels`;
 const URL_GET_ISSUES = `${ENV.GITHUB_API_URL}/issues`;
 
-interface FetchParams {
-	state?: State,
-	labels: string[]
+interface FetchIssuesParams {
+	state?: State;
+	labels: string[];
+	page: number;
 }
 
 const doGet = async <T>(url: string) => {
@@ -28,11 +29,13 @@ export const fetchLabels = async () => {
 	return labels as Label[];
 }
 
-export const fetchIssues = async ({ state, labels }: FetchParams) => {
+export const fetchIssues = async ({ state, labels, page = 1 }: FetchIssuesParams) => {
 	const params = new URLSearchParams();
 
 	if (state) params.append("state", state);
 	if (labels.length > 0) params.append("labels", labels.join(","));
+
+	params.append("page", page.toString());
 
 	return await doGet<Issue[]>(`${URL_GET_ISSUES}?${params.toString()}`);
 }
